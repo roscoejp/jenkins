@@ -16,7 +16,7 @@ else {
 
 stage('Get confirmation') {
     milestone()
-    input params.PROMPT
+    input "${params.PROMPT}"
     milestone()
 }
 
