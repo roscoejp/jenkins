@@ -16,7 +16,7 @@ else {
 
 stage('Get confirmation') {
     milestone()
-    input "Looks good?"
+    input params.PROMPT
     milestone()
 }
 
