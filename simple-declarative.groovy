@@ -26,7 +26,8 @@ pipeline {
         
         stage('True/False') {
             steps {
-                if (${params.INPUT}) {
+                when{
+                expression { ${params.INPUT} ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/) {
                     stage('True') {
                         steps {
                             echo "True"
