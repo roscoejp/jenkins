@@ -26,7 +26,7 @@ pipeline {
         
         stage('True/False') {
             steps {
-                if (params.INPUT) {
+                if (${params.INPUT}) {
                     stage('True') {
                         steps {
                             echo "True"
