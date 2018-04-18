@@ -22,6 +22,9 @@ if (params.INPUT) {
     stage('True') { 
         echo 'I am True expression.' 
     }
+    stage('Arbitrary Complication') {
+        echo 'I am a complication.'   
+    }
 } 
 else {
     stage('False') { 
