@@ -4,14 +4,17 @@ parallel firstBranch: {
     stage('Say World') { 
         echo 'World' 
     }
+    stage('Arbitrary Complication') {
+        echo 'I am a complication.'   
+    }
 }, secondBranch: {
     stage('Fortune Cookie') { 
         echo "${params.TEXTINPUT}"
-        parallel firstBranch: {
+        parallel NestedFirstBranch: {
             stage('Say Nested Word') { 
                 echo 'Nested World' 
             }
-        }, secondBranch: {
+        }, NestedSecondBranch: {
             stage('Nested Fortune Cookie') { 
                 echo "Nested ${params.TEXTINPUT}" 
             }
@@ -21,9 +24,6 @@ parallel firstBranch: {
 if (params.INPUT) {
     stage('True') { 
         echo 'I am True expression.' 
-    }
-    stage('Arbitrary Complication') {
-        echo 'I am a complication.'   
     }
 } 
 else {
