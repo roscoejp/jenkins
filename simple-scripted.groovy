@@ -27,7 +27,7 @@ else {
 
 stage('Get confirmation') {
     milestone()
-    def str_submitter = input(submitterParameter: 'SUBMITTER', submitter: 'roscoejp', message: "${params.PROMPT}", ok: 'Bob)
+    def str_submitter = input(submitterParameter: 'SUBMITTER', submitter: 'roscoejp', message: "${params.PROMPT}", ok: 'Bob')
     echo "Build Bob'd by: ${str_submitter}"
     milestone()
 }
