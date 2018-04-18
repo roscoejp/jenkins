@@ -3,13 +3,13 @@ stage('Say Hello') { echo 'Hello' }
 parallel firstBranch: {
     stage('Say World') { echo 'World' }
 }, secondBranch: {
-    stage('Fortune Cookie') { echo "${params.INPUT}" }
+    stage('Fortune Cookie') { echo "${params.TEXTINPUT}" }
 }
-if (params.INPUT == 'default') {
-    stage('True') { echo 'I am default expression.' }
+if (params.INPUT) {
+    stage('True') { echo 'I am True expression.' }
 } 
 else {
-    stage('False') { echo 'I am not a default expression.' }
+    stage('False') { echo 'I am a False expression.' }
 }
 
 //stage('Fail') { sh 'cp bob bob' }
