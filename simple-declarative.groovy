@@ -26,20 +26,11 @@ pipeline {
         
         stage('True/False') {
             steps {
-                when{
-                expression { ${params.INPUT} ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/) {
-                    stage('True') {
-                        steps {
-                            echo "True"
-                        }
-                    }
+                when {
+                    expression { ${params.INPUT} ==~ /(?i)(Y|YES|T|TRUE|ON|RUN)/) {
                 }
-                else {
-                    stage('False') {
-                        steps {
-                            echo "False"
-                        }
-                    }
+                steps {
+                    echo "True"
                 }
             }
         }
