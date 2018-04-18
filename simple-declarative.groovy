@@ -24,19 +24,23 @@ pipeline {
             }
         }
         
-        if (params.INPUT) {
-            stage('Flat True') {
-                steps {
-                    echo "True"
+        stage('True/False') {
+            steps {
+                if (params.INPUT) {
+                    stage('True') {
+                        steps {
+                            echo "True"
+                        }
+                    }
+                }
+                else {
+                    stage('False') {
+                        steps {
+                            echo "False"
+                        }
+                    }
                 }
             }
         }
-        else {
-            stage('Flat False') {
-                steps {
-                    echo "False"
-                }
-            }
-        } 
     }
 }
