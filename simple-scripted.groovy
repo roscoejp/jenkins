@@ -10,15 +10,6 @@ parallel firstBranch: {
 }, secondBranch: {
     stage('Fortune Cookie') { 
         echo "${params.TEXTINPUT}"
-        parallel NestedFirstBranch: {
-            stage('Say Nested Word') { 
-                echo 'Nested World' 
-            }
-        }, NestedSecondBranch: {
-            stage('Nested Fortune Cookie') { 
-                echo "Nested ${params.TEXTINPUT}" 
-            }
-        }
     }
 }
 if (params.INPUT) {
@@ -36,7 +27,7 @@ else {
 
 stage('Get confirmation') {
     milestone()
-    input "${params.PROMPT}"
+    input (submitterParameter: 'submitter', submitter: 'roscoejp', message: "${params.PROMPT}", ok: 'Bob')
     milestone()
 }
 
