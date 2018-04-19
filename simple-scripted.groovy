@@ -1,3 +1,7 @@
+#!/usr/bin/env groovy
+# Simple example of Scripted pipeline with some parallelism
+# More at https://github.com/jenkinsci/pipeline-examples
+
 stage('Say Hello') { echo 'Hello' }
 
 parallel firstBranch: {
