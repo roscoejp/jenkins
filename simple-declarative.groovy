@@ -1,5 +1,6 @@
 #!/usr/bin/env groovy
 // Declarative Pipeline
+// More at https://github.com/jenkinsci/pipeline-examples/tree/master/declarative-examples
 pipeline {
     agent any
     
