@@ -1,5 +1,8 @@
 #!/usr/bin/env groovy
 // Run this outside the sandbox so you can get the node count
+// parameters {
+//     string(name: 'SUBNET', defaultValue: '127.0.0.1', description: 'CIDR to be split and scanned in parallel.')
+// }
 
 int executorCount = 0
 def subnetList = []
