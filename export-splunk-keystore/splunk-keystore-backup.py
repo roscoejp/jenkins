@@ -4,7 +4,7 @@ import tarfile
 import argparse
 import sys, json
 from time import strftime
-from os import path, remove
+from os import path, remove, makedirs, OSError
 from splunklib.client import connect, HTTPError
 
 def main():
@@ -23,6 +23,12 @@ def main():
     args = parser.parse_args()
 
     artifact_dir = path.join(path.dirname(path.realpath(__file__)), 'artifacts')
+    # Make sure artifact dir is there since we use it
+    if not path.exists(artifact_dir):
+        try:
+            makedirs(artifact_dir)
+        except: # Guard against race condition
+            pass
     file_names = []
 
     with open(path.join(artifact_dir, strftime("%m%d%Y") + '.log'), 'w+') as log_file: 
