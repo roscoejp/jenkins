@@ -4,7 +4,7 @@ import tarfile
 import argparse
 import sys, json
 from time import strftime
-from os import path, remove, makedirs, OSError
+from os import path, remove, makedirs
 from splunklib.client import connect, HTTPError
 
 def main():
