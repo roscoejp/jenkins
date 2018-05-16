@@ -1,0 +1,17 @@
+# /etc/systemd/system/jenkins-slave.service
+[Unit]
+Description=Jenkins Agent Daemon
+After=network.target
+
+[Service]
+Type=forking
+PIDFile=/tmp/jenkins-slave.pid
+ExecStartPre=/usr/bin/rm -f /tmp/jenkins-slave.pid
+ExecStart=/bin/bash -c "/etc/init.d/jenkins-slave start"
+ExecStop=/bin/bash -c "/etc/init.d/jenkins-slave stop"
+ExecReload=/bin/bash -c "/etc/init.d/jenkins-slave reload"
+KillSignal=SIGQUIT
+ExecStopPost=/usr/bin/rm -f /tmp/jenkins-slave.pid
+
+[Install]
+WantedBy=multi-user.target
