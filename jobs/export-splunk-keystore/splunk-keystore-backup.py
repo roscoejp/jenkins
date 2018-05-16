@@ -39,7 +39,7 @@ def main():
     kwargs = {key: value for key, value in vars(args).items() if key in kwargs_list}
     service = connect(**kwargs)
 
-    # Backup all of atlassian_monitoring since we can't do only lookups
+    # Backup all of application keystore since we can't do only lookups
     for collection in service.kvstore:
         data_file_name = path.join(artifact_dir, collection.name + '.json')
         try:
