@@ -34,12 +34,24 @@ def main():
     with open(path.join(artifact_dir, strftime("%m%d%Y") + '.log'), 'w+') as log_file: 
         logging.basicConfig(filename=log_file.name,level=logging.INFO, format='[%(asctime)s] %(levelname)-8s %(message)s', datefmt='%m/%d/%Y %H:%M:%S')
 
+    # Debug options
+    if args.debug:
+        args = parser.parse_args([
+        '--username=$USERNAME',
+        '--password=$PASSWORD',
+        '--host=$SPLUNK_DB_HOST',
+        '--app=$APP_NAME',
+        '--owner=nobody', 
+        '--debug',
+        '--tar'])
+        logging.info("Running with debug parameters: %s" % args)
+
     # Create connect kwargs from arguments
     kwargs_list = ['username', 'password', 'host', 'port', 'owner', 'app']
     kwargs = {key: value for key, value in vars(args).items() if key in kwargs_list}
     service = connect(**kwargs)
 
-    # Backup all of application keystore since we can't do only lookups
+    # Backup all of app keystore since we can't do only lookups
     for collection in service.kvstore:
         data_file_name = path.join(artifact_dir, collection.name + '.json')
         try:
