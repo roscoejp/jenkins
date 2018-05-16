@@ -1,0 +1,7 @@
+# /etc/sysconfig/jenkins-slave
+# Note that you'll need to provision the node in Jenkins before being able to fill out this info
+JENKINS_WORKDIR="/opt/jenkins-slave"
+JENKINS_USER="jenkins_slave"
+JENKINS_URL="<REPLACE WITH JENKINS MASTER URL>"
+JENKINS_NODENAME="<REPLACE WITH DESIRED NODE NAME>"
+JENKINS_SECRET="<REPLACE WITH NODE SECRET FROM JENINS NODE CONFIG>"
