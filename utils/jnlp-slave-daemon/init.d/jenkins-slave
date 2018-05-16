@@ -1,0 +1,132 @@
+#!/bin/bash
+
+# chkconfig: - 20 80
+# description: Init script for jenkins-slave
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# /etc/init.d/jeknins-slave
+prog="jenkins-slave"
+
+[ -f /etc/sysconfig/${prog} ] && . /etc/sysconfig/${prog}
+[ -n "${JENKINS_URL}" ] || exit 0
+[ -n "${JENKINS_WORKDIR}" ] || exit 0
+[ -n "${JENKINS_USER}" ] || exit 0
+[ -n "${JENKINS_NODENAME}" ] || exit 0
+[ -n "${JENKINS_SECRET}" ] || exit 0
+[ -x /usr/bin/java ] || exit 0
+
+exec="/usr/bin/java \
+    -jar ${JENKINS_WORKDIR}/slave.jar \
+    -jnlpUrl ${JENKINS_URL}/computer/${JENKINS_NODENAME}/slave-agent.jnlp \
+    -secret ${JENKINS_SECRET} \
+    >/var/log/${prog}/${prog}.log 2>&1 &"
+
+
+lockfile=/var/lock/subsys/${prog}.lock
+pidpath=/tmp/${prog}.pid
+
+create_user() 
+{
+    awk -F":" '{ print $1 }' /etc/passwd | grep -x ${JENKINS_USER} > /dev/null
+    if [ $? -eq 1 ]; then
+        useradd ${JENKINS_USER} -d ${JENKINS_WORKDIR} -s /bin/false
+    fi
+}
+
+create_dir() 
+{
+    if [ ! -d ${JENKINS_WORKDIR} ];
+    then
+        mkdir -p ${JENKINS_WORKDIR}
+    fi
+}
+
+create_logdir() 
+{
+    if [ ! -d /var/log/${prog} ];
+    then
+        mkdir -p /var/log/${prog}
+        chown -R ${JENKINS_USER}:${JENKINS_USER} /var/log/${prog}
+    fi
+}
+
+download_jar() 
+{
+    curl -s -o ${JENKINS_WORKDIR}/slave.jar ${JENKINS_URL}/jnlpJars/slave.jar || exit 0
+    chown -R ${JENKINS_USER}:${JENKINS_USER} ${JENKINS_WORKDIR}
+}
+
+start() 
+{
+    echo "Creating user."
+    create_user
+    
+    echo "Creating workspaces."
+    create_dir
+    
+    echo "Creating log directory."
+    create_logdir
+    
+    cd ${JENKINS_WORKDIR}
+    [ -f slave.jar ] || echo "Downloading agent." && download_jar
+    
+    echo -e $"Starting Jenkins BuildSlave..."
+    
+    # Kill previous invocations
+    pkill -9 -f 'java.*slave.jar'
+
+    su - ${JENKINS_USER} sh -s /bin/bash -c "${exec}"
+    pid=$(pgrep -f 'java.*slave.jar')
+    retval=$?
+    [ ${retval} -eq 0 ] && touch ${lockfile} && success || failure
+    echo
+    echo ${pid} > ${pidpath} 
+    return ${retval}
+    
+}
+
+stop() 
+{
+    echo -e $"Shutting down Jenkins BuildSlave..."
+    pkill -9 -f 'java.*slave.jar'
+    retval=$?
+    echo
+    [ ${retval} -eq 0 ] && rm -f ${lockfile}
+    return ${retval}
+}
+
+rh_status() 
+{
+    status ${prog}
+    # status java
+}
+
+start
+
+# See how we were called.
+case "$1" in
+    start)
+        echo "Starting service."
+        start
+        ;;
+    stop)
+        echo "Stopping service."
+        stop
+        ;;
+    restart|reload)
+        echo "Reload/starting service."
+        stop
+        start
+        ;;
+    status)
+        echo "Getting service status."
+        rh_status
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart|reload|status}"
+        exit 2
+esac
+
+exit $?
