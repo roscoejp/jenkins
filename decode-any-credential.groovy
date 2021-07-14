@@ -1,3 +1,4 @@
+// Run this from the script console in Jenkins. Replace MY_JENKINS_CREDENTIAL_ID with your credential ID
 import com.cloudbees.plugins.credentials.*
 import com.cloudbees.plugins.credentials.common.*
 import com.cloudbees.plugins.credentials.domains.*
