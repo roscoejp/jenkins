@@ -20,7 +20,9 @@ for (credential in creds) {
     if(credential.id == cred_id){
         if (credential instanceof UsernamePasswordCredentialsImpl) {
             println credential.getId() + " " + credential.getUsername() + " " + credential.getPassword().getPlainText()
-        } else if (credential instanceof StringCredentialsImpl) {
+        } else if (credential instanceof org.jenkinsci.plugins.plaincredentials.impl.FileCredentialsImpl) {
+            println credential.getId() + " " + credential.fileName + " " + credential.content.getText("UTF-8") 
+        }} else if (credential instanceof StringCredentialsImpl) {
             println credential.getId() + " " + credential.getSecret().getPlainText() 
         } else if(credential instanceof BasicSSHUserPrivateKey) {
             println credential.getId() + " " + credential.getUsername() + "\n" + credential.getPrivateKey()
